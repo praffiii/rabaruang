@@ -1,0 +1,138 @@
+:root {
+  --chalkboard: #0E3B2E;
+  --chalkboard-deep: #0A2C22;
+  --chalk: #FFF9E6;
+  --chalk-yellow: #FFE14D;
+  --board: #F4F7F5;
+  --ink: #12309A;
+  --highlighter: #FFE14D;
+  --marker-red: #B3122B;
+  --radius: 14px;
+}
+
+* { box-sizing: border-box; margin: 0; }
+[hidden] { display: none !important; }
+
+html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
+body {
+  background: var(--chalkboard);
+  color: var(--chalk);
+  font: 400 18px/1.4 "Atkinson Hyperlegible Next", "Atkinson Hyperlegible", system-ui, sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+
+button, input { font: inherit; color: inherit; }
+button {
+  min-height: 56px;
+  padding: 8px 14px;
+  border: 2px solid currentColor;
+  border-radius: var(--radius);
+  background: transparent;
+  font-weight: 700;
+}
+:focus-visible { outline: 4px solid var(--chalk-yellow); outline-offset: 2px; }
+[tabindex="-1"]:focus { outline: none; }
+.white :focus-visible, #sorot :focus-visible, dialog :focus-visible { outline-color: var(--ink); }
+
+[data-screen] { height: 100dvh; display: flex; flex-direction: column; }
+
+/* Home: two boards, each one giant button */
+#home { position: relative; }
+.half {
+  flex: 1; width: 100%; border: 0; border-radius: 0;
+  display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start;
+  gap: 6px; padding: 24px 22px; text-align: left; position: relative; overflow: hidden;
+}
+.half.chalk { background: var(--chalkboard); color: var(--chalk); }
+.half.white { background: var(--board); color: var(--ink); padding-bottom: 76px; }
+.half svg { position: absolute; inset: 22px 22px auto; width: calc(100% - 44px); height: 42%; }
+.drawn {
+  fill: none; stroke: var(--chalk-yellow); stroke-width: 7; stroke-linecap: round;
+  stroke-dasharray: 1; stroke-dashoffset: 1;
+  animation: draw 1.4s 0.15s ease-out forwards;
+}
+@keyframes draw { to { stroke-dashoffset: 0; } }
+.big { font-size: clamp(42px, 13vw, 64px); font-weight: 800; line-height: 1.02; letter-spacing: -0.01em; }
+.sub { font-size: 18px; font-weight: 400; max-width: 30ch; }
+.marker { background: var(--highlighter); padding: 0 0.12em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.keyLink {
+  position: absolute; right: 14px; bottom: 12px; min-height: 48px;
+  border: 0; color: var(--ink); text-decoration: underline; font-weight: 400;
+}
+
+/* Capture */
+#capture { background: #000; }
+video { flex: 1; min-height: 0; width: 100%; object-fit: cover; background: var(--chalkboard-deep); }
+.captureBar {
+  background: var(--chalkboard); padding: 14px 16px calc(14px + env(safe-area-inset-bottom));
+  display: grid; gap: 10px;
+}
+.captureBar h1 { font-size: 24px; font-weight: 800; }
+#captureNote { font-size: 16px; min-height: 22px; }
+#captureNote.problem { color: var(--chalk-yellow); font-weight: 700; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.primary { background: var(--chalk-yellow); color: var(--chalkboard-deep); border-color: var(--chalk-yellow); font-size: 22px; min-height: 72px; }
+
+/* Reading */
+#reading { justify-content: center; align-items: center; padding: 24px; text-align: center; }
+#readingText { font-size: 32px; font-weight: 800; }
+
+/* Shared top bar */
+.bar { display: grid; grid-template-columns: auto 1fr; gap: 10px; padding: 10px 12px; align-items: center; }
+.bar.light { background: var(--board); color: var(--ink); }
+.bar h1 { font-size: 20px; font-weight: 800; min-width: 0; }
+
+/* Raba */
+#raba { background: var(--chalkboard); }
+#rabaArea { flex: 1; min-height: 0; position: relative; touch-action: none; user-select: none; -webkit-user-select: none; }
+#rabaArea * { touch-action: none; }
+#rabaCanvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+#tactile { position: absolute; inset: 0; }
+#tactile button {
+  position: absolute; min-height: 0; padding: 0; border: 0; border-radius: 0;
+  background: transparent; color: transparent; overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+#tactile button:focus { outline: none; }
+#rabaNow { min-height: 76px; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); font-size: 22px; font-weight: 700; color: var(--chalk-yellow); }
+
+/* Sorot */
+#sorot { background: var(--board); color: var(--ink); }
+#stage { position: relative; flex: 0 1 auto; min-height: 0; margin: 0 12px; }
+#sorotCanvas { display: block; width: 100%; height: auto; border-radius: 6px; }
+#bubble {
+  position: absolute; max-width: 78%; padding: 10px 14px;
+  background: var(--ink); color: #fff; border-radius: var(--radius);
+  font-size: 19px; font-weight: 700; line-height: 1.3;
+  box-shadow: 0 0 0 3px var(--board);
+  transition: left 0.2s ease, top 0.2s ease;
+}
+#bubble::after {
+  content: ""; position: absolute; left: var(--tail, 50%);
+  width: 18px; height: 18px; background: inherit;
+  transform: translateX(-50%) rotate(45deg);
+}
+#bubble.below::after { top: -8px; }
+#bubble.above::after { bottom: -8px; }
+#bubble.pointing { background: #fff; color: var(--ink); box-shadow: 0 0 0 3px var(--ink); }
+#bubble small { display: block; font-size: 15px; font-weight: 400; }
+#loose { flex: 1; min-height: 64px; overflow: hidden; padding: 12px 16px; font-size: 20px; color: var(--ink); }
+.sorotControls { display: grid; gap: 10px; padding: 0 12px calc(12px + env(safe-area-inset-bottom)); }
+#sorot .primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+#sorot .primary.on { background: var(--marker-red); border-color: var(--marker-red); }
+
+/* Key dialog */
+dialog { margin: auto; width: min(92vw, 420px); padding: 20px; border: 0; border-radius: var(--radius); background: var(--board); color: var(--ink); }
+dialog::backdrop { background: rgba(10, 44, 34, 0.8); }
+dialog form { display: grid; gap: 12px; }
+dialog h2 { font-size: 26px; font-weight: 800; }
+dialog a { color: inherit; font-weight: 700; }
+dialog label { font-weight: 700; }
+dialog input { min-height: 56px; padding: 0 12px; border: 2px solid var(--ink); border-radius: 10px; background: #fff; }
+dialog .primary { background: var(--ink); color: #fff; border-color: var(--ink); font-size: 18px; min-height: 56px; }
+.quiet { border: 0; font-weight: 400; text-decoration: underline; min-height: 48px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .drawn { animation: none; stroke-dashoffset: 0; }
+  #bubble { transition: none; }
+}

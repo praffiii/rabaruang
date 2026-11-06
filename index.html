@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0E3B2E">
+<title>RabaRuang</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<section id="home" data-screen>
+  <button id="goRaba" class="half chalk" type="button">
+    <svg viewBox="0 0 400 200" aria-hidden="true">
+      <path class="drawn" pathLength="1" d="M8 188 C 90 180, 130 20, 205 16 S 320 150, 392 176"/>
+    </svg>
+    <span class="big">Raba papan</span>
+    <span class="sub">Untuk mahasiswa netra. Dengar grafik di papan lewat jari.</span>
+  </button>
+  <button id="goSorot" class="half white" type="button">
+    <span class="big"><span class="marker">Sorot</span> papan</span>
+    <span class="sub">Untuk mahasiswa Tuli. Kata-kata dosen menempel di bagian papan yang dibahas.</span>
+  </button>
+  <button id="openKey" class="keyLink" type="button">Kunci AI</button>
+</section>
+
+<section id="capture" data-screen hidden>
+  <video id="camera" playsinline muted aria-hidden="true"></video>
+  <div class="captureBar">
+    <h1 id="captureTitle" tabindex="-1">Foto papan</h1>
+    <p id="captureNote"></p>
+    <button id="shutter" class="primary" type="button">Ambil foto</button>
+    <div class="row">
+      <button id="gallery" type="button">Pilih dari galeri</button>
+      <button id="captureBack" type="button">Kembali</button>
+    </div>
+    <div class="row">
+      <button id="sampleGraph" type="button">Contoh grafik</button>
+      <button id="sampleFlow" type="button">Contoh diagram</button>
+    </div>
+  </div>
+  <input id="file" type="file" accept="image/*" hidden>
+</section>
+
+<section id="reading" data-screen hidden>
+  <p id="readingText" tabindex="-1">Membaca papan...</p>
+</section>
+
+<section id="raba" data-screen hidden>
+  <div class="bar">
+    <button id="rabaBack" type="button">Kembali</button>
+    <button id="rabaSummary" type="button">Ulangi ringkasan</button>
+  </div>
+  <div id="rabaArea" role="group" aria-label="Papan. Geser jari untuk meraba.">
+    <canvas id="rabaCanvas" aria-hidden="true"></canvas>
+    <div id="tactile"></div>
+  </div>
+  <p id="rabaNow" aria-hidden="true"></p>
+</section>
+
+<section id="sorot" data-screen hidden>
+  <div class="bar light">
+    <button id="sorotBack" type="button">Kembali</button>
+    <h1 id="sorotTitle" tabindex="-1"></h1>
+  </div>
+  <div id="stage">
+    <canvas id="sorotCanvas" aria-hidden="true"></canvas>
+    <div id="bubble" hidden></div>
+  </div>
+  <div id="loose" aria-live="polite"></div>
+  <div class="sorotControls">
+    <button id="listen" class="primary" type="button">Mulai dengar dosen</button>
+    <button id="playLecture" type="button">Putar contoh kuliah</button>
+  </div>
+</section>
+
+<dialog id="keyDialog">
+  <form method="dialog">
+    <h2>Kunci AI</h2>
+    <p>Foto asli dibaca oleh Gemini dan butuh kunci. Contoh grafik dan diagram tetap jalan tanpa kunci.</p>
+    <p>Kunci hanya tersimpan di ponsel ini. <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Buat kunci gratis</a></p>
+    <label for="keyInput">Kunci Gemini</label>
+    <input id="keyInput" type="password" autocomplete="off" spellcheck="false">
+    <div class="row">
+      <button id="keySave" class="primary" value="save">Simpan</button>
+      <button value="cancel">Batal</button>
+    </div>
+    <button id="keyClear" type="button" class="quiet">Hapus kunci dari ponsel ini</button>
+  </form>
+</dialog>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
